@@ -48,7 +48,7 @@ var Engine = (function(global) {
         win.requestAnimationFrame(main);
     }
 
-    /* 这个函数调用一些初始化工作，特别是设置游戏必须的 lastTime 变量，这些工作只用
+    /* @description 这个函数调用一些初始化工作，特别是设置游戏必须的 lastTime 变量，这些工作只用
      * 做一次就够了
      */
     function init() {
@@ -56,7 +56,6 @@ var Engine = (function(global) {
         lastTime = Date.now();
         main();
     }
-
     /* 这个函数被 main 函数（我们的游戏主循环）调用，它本身调用所有的需要更新游戏角色
      * 数据的函数，取决于你怎样实现碰撞检测（意思是如何检测两个角色占据了同一个位置，
      * 比如你的角色死的时候），你可能需要在这里调用一个额外的函数。现在我们已经把这里
@@ -144,25 +143,29 @@ var Engine = (function(global) {
     /* 紧接着我们来加载我们知道的需要来绘制我们游戏关卡的图片。然后把 init 方法设置为回调函数。
      * 那么当这些图片都已经加载完毕的时候游戏就会开始。
      */
-    Resources.load([
-        'images/stone-block.png',
-        'images/water-block.png',
-        'images/grass-block.png',
-        'images/enemy-bug.png',
-        'images/char-boy.png',
-        'images/char-cat-girl.png',
-        'images/char-horn-girl.png',
-        'images/char-pink-girl.png',
-        'images/char-princess-girl.png'
-    ]);
-    Resources.onReady(init);
-
+    
+    
     /* 把 canvas 上下文对象绑定在 global 全局变量上（在浏览器运行的时候就是 window
      * 对象。从而开发者就可以在他们的app.js文件里面更容易的使用它。
      */
     global.ctx = ctx;
-    return function(param){
-        checkCollisions(param);
+    return {
+        checkCollisions: function(param){
+            checkCollisions(param);
+        },
+        init:function(){
+            Resources.load([
+                'images/stone-block.png',
+                'images/water-block.png',
+                'images/grass-block.png',
+                'images/enemy-bug.png',
+                'images/char-boy.png',
+                'images/char-cat-girl.png',
+                'images/char-horn-girl.png',
+                'images/char-pink-girl.png',
+                'images/char-princess-girl.png'
+            ]);
+            Resources.onReady(init);
+        }
     }
 })(this);
-

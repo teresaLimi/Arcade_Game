@@ -2,7 +2,7 @@
 var Enemy = function() {
     this.x = -101;
     this.y = Math.floor(Math.random() * 3 + 1) * 75; //Math.floor(Math.random()*(max-min+1)+min);
-    this.speed = (Math.random() * 5 - 1) * 100;
+    this.speed = Math.random() * 100 + 100;
     this.sprite = 'images/enemy-bug.png';
 };
 
@@ -22,15 +22,16 @@ Enemy.prototype.render = function() {
 Enemy.prototype.checkCollisions = function() {
     if(Math.round(this.x/101) == Math.round(player.x/101) &&
     Math.round( this.y/83) == Math.round(player.y/83)){
-        Engine(false);
+        Engine.checkCollisions(false);
     }
 };
 
 // @description 玩家类
-var Player = function(){
+// @param {img} 玩家类型
+var Player = function(img){
     this.x = 2 * 101;
     this.y = 5 * 83;
-    this.sprite = 'images/char-cat-girl.png';
+    this.sprite = img;
 };
 Player.prototype = Object.create(Enemy.prototype);
 Player.prototype.constructor = Player;
@@ -48,7 +49,7 @@ Player.prototype.handleInput = function(key){
             if(this.y/83 > 0){
                 this.y -= 83;
                 if(this.y/83 == 0){
-                    Engine(true);
+                    Engine.checkCollisions(true);
                 }
             }
             break;
@@ -72,10 +73,10 @@ Player.prototype.update = function() {
 
 // @description 实例化所有对象
 // @description 把玩家对象放进一个叫 player 的变量里面
-let player = new Player();
+let player;
 // @description 把所有敌人的对象都放进一个叫 allEnemies 的数组里面
 let allEnemies = [];
-function createEnemies(){
+var createEnemies = function (){
     setTimeout(function(){
         let enemy = new Enemy();
         allEnemies.push(enemy);
@@ -90,8 +91,56 @@ document.addEventListener('keyup', function(e) {
         37: 'left',
         38: 'up',
         39: 'right',
-        40: 'down'
+        40: 'down',
+        13: 'enter'
     };
-
-    player.handleInput(allowedKeys[e.keyCode]);
+    // @description 监听选择角色时key值
+    if(document.getElementsByClassName("dialog")[0].style.display == "none"){
+        player.handleInput(allowedKeys[e.keyCode]);
+    }else{
+        choseRole(allowedKeys[e.keyCode]);
+    }
 });
+
+// @description 键盘选择角色
+// @param {key} 键码值
+function choseRole(key){
+    var currentActive = document.getElementsByClassName('active')[0];
+    var liList = document.getElementsByTagName('li');
+    var index;
+    for(var i = 0; i < liList.length; i++){
+        if(liList[i].getAttribute('class')){
+            index = i;
+        }
+    }
+    switch(key){
+        case 'left':
+            if(index > 0){
+                currentActive.removeAttribute('class');
+                liList[index - 1].setAttribute('class','active');
+            }
+            break;
+        case 'right':
+            if(index < liList.length - 1){
+                currentActive.removeAttribute('class');
+                liList[index + 1].setAttribute('class','active');
+            }
+            break;
+        case 'enter':
+            gameState();
+            break;
+    }
+}
+
+// @description 鼠标选择角色
+// @param {e} 当前点击li的this
+function clickChoseRole(e){
+    document.getElementsByClassName('active')[0].removeAttribute('class');
+    e.setAttribute('class','active');
+}
+// @description 点击开始按钮，游戏开始
+function gameState(){
+    document.getElementsByClassName("dialog")[0].style.display = "none";
+    player = new Player(document.getElementsByClassName('active')[0].children[0].getAttribute('src'));
+    Engine.init();
+}

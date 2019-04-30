@@ -3,15 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <title>Effective JavaScript: Frogger</title>
+    <meta name="keywords" content=""/>
+    <meta name="description" content=""/>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dialog.css">
 </head>
 <body>
-    <!-- <div class="Char">
-        <h1>Select A Character</h1>
-        <ul></ul>
-    </div> -->
+    <div class="dialog">
+        <div class="dialogBox">
+            <h1>Select A Character</h1>
+            <div class="CharactorBox">
+                <ul>
+                    <li class="active" onclick="clickChoseRole(this)">
+                        <img src='images/char-boy.png'/>
+                    </li>
+                    <li onclick="clickChoseRole(this)">
+                        <img src='images/char-cat-girl.png'/>
+                    </li>
+                    <li onclick="clickChoseRole(this)">
+                        <img src='images/char-horn-girl.png'/>
+                    </li>
+                    <li onclick="clickChoseRole(this)">
+                        <img src='images/char-pink-girl.png'/>
+                    </li>
+                    <li onclick="clickChoseRole(this)">
+                        <img src='images/char-princess-girl.png'/>
+                    </li>
+                </ul>
+                <input type="submit" value="Enter" onclick="gameState()">
+            </div>
+        </div>
+    </div>
+
     <script src="js/resources.js"></script>
     <script src="js/app.js"></script>
     <script src="js/engine.js"></script>
+    <script src="js/dialog.js"></script>
 </body>
 </html>
