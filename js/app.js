@@ -94,7 +94,7 @@ document.addEventListener('keyup', function(e) {
         40: 'down',
         13: 'enter'
     };
-    // @description 监听选择角色时key值
+    //@description 监听选择角色时key值
     if(document.getElementsByClassName("dialog")[0].style.display == "none"){
         player.handleInput(allowedKeys[e.keyCode]);
     }else{
